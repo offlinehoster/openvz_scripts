@@ -1,0 +1,46 @@
+#!/bin/bash
+# vzCTID_renumbering v0.1
+# 
+# written by Christian Sarazin 
+# @offlinehoster
+# https://github.com/offlinehoster
+# date: 13.07.2013
+#
+# usage: vzCTID_renumbering currentCTID newCTID
+#
+# example: for renumbering CTID 100 to CTID 200 do this: 
+#          openVZHost:# vzCTID_renumbering 100 200 
+#
+# $1 = currentCTID
+# $2 = newCTID
+
+# Define old and new CTID
+oldCTID=$1
+newCTID=$2
+
+# Define your openVZ location here
+openVZlocation=/srv/vz
+
+# Color Settings
+ESC_SEQ="\x1b["
+COL_GREEN=$ESC_SEQ"32;01m"
+COL_RED=$ESC_SEQ"31;01m"
+COL_RESET=$ESC_SEQ"39;49;00m"
+
+# Renumbering Part
+echo -e "Pressing $COL_GREEN [Enter] $COL_RESET will stop the $COL_RED CTID $1 $COL_RESET (all Services inside this CTID will be terminated) and start again as $COL_GREEN CTID $2 $COL_RESET"
+echo -e "or exit with $COL_RED CTRL+c $COL_RESET"
+read -p ""
+echo -e "Renumbering in progress \n"
+echo -e "Stopping container $COL_RED $oldCTID $COL_RESET"
+vzctl stop $1
+echo -e "$COL_GREEN Done $COL_RESET \n"
+echo -e "Renaming the config files"
+mv $openVZlocation/root/$1/ $openVZlocation/root/$2/
+mv $openVZlocation/private/$1/ $openVZlocation/private/$2/
+mv /etc/sysconfig/vz-scripts/$1.conf /etc/sysconfig/vz-scripts/$2.conf
+echo -e "$COL_GREEN Done $COL_RESET \n"
+echo -e "Starting container $COL_RED $newCTID $COL_RESET"
+vzctl start $2
+echo -e "\n The CTID $COL_RED $oldCTID $COL_RESET is now known as $COL_GREEN $newCTID $COL_RESET \n"
+echo -e "$COL_GREEN Renumbering Completed $COL_RESET"
