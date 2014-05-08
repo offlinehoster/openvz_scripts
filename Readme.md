@@ -4,7 +4,7 @@ If you have multiple openVZ hosts and you would like to migrate one openVZ Conta
 
 
 #### Installing
-Just download the vzCTID_renumbering to your local /usr/local/bin or any other directory.
+Just download the vzCTID_renumbering_(Debian|CentOS) to your local /usr/local/bin or any other directory.
 
 #### Bob has a question: Why don´t you just use -> 'vzctl chkpnt 100 --dumpfile /tmp/Dump.100' ?
 
